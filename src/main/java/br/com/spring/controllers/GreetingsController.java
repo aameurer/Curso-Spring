@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,4 +76,46 @@ public class GreetingsController {
     	return new ResponseEntity<String>("Usuário deletado com sucesso", HttpStatus.OK);
     	
     }
+    
+    @GetMapping(value = "buscaruserid") // mapeia a URL
+    @ResponseBody // Descrição da Resposta
+    public ResponseEntity<Usuario> buscaruserid(@RequestParam("iduser") Long iduser){   // Recebe os dados para colsultar
+    	
+    	Usuario usuario = usuarioRepository.findById(iduser).get();
+    	
+    	return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+    	
+    }
+    
+    @PutMapping(value = "atualizar") // mapeia a URL
+    @ResponseBody // Descrição da Resposta
+    public ResponseEntity<?> atualizar(@RequestBody Usuario usuario){   // Recebe os dados para salvar
+    	if (usuario.getId() == null) {
+    		
+    		return new ResponseEntity<String>("Id não informado para atualização.", HttpStatus.OK);
+    		
+    	}
+    	Usuario user = usuarioRepository.saveAndFlush(usuario);
+    	
+    	return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+    	
+    }
+    
+    @GetMapping(value = "buscarPorNome") // mapeia a URL
+    @ResponseBody // Descrição da Resposta
+    public ResponseEntity<List<Usuario>> buscarPorNome(@RequestParam(name = "name") String name){   // Recebe os dados para colsultar
+    	
+    	List<Usuario> usuario = usuarioRepository.buscaPorNome(name.trim().toUpperCase());
+    	
+    	return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.OK);
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 }
